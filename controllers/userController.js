@@ -1,34 +1,13 @@
 const { ObjectId } = require('mongoose').Types;
 const { User, Thought } = require('../models');
 
-const headCount = async () =>
-  User.aggregate()
-    .count('userCount')
-    .then((numberOfUsers) => numberOfUsers);
-
-// const grade = async (userId) =>
-//   User.aggregate([   
-//     { $match: { _id: ObjectId(userId) } },
-//     {
-//       $unwind: '$reactionss',
-//     },
-//     {
-//       $group: {
-//         _id: ObjectId(userId),
-//         overallGrade: { $avg: '$reactions.score' },
-//       },
-//     },
-//   ]);
 
 module.exports = {
   getUsers(req, res) {
     User.find()
       .then(async (users) => {
-        const userObj = {
-          users,
-          headCount: await headCount(),
-        };
-        return res.json(userObj);
+        //check - req.body?
+        return res.json(users);
       })
       .catch((err) => {
         console.log(err);
@@ -44,7 +23,9 @@ module.exports = {
           ? res.status(404).json({ message: 'No user with that ID' })
           : res.json({
               user,
-              //grade: await grade(req.params.userId),
+              //thought?
+              //populate friends
+             
             })
       )
       .catch((err) => {
@@ -59,6 +40,20 @@ module.exports = {
       .catch((err) => res.status(500).json(err));
   },
  
+  updateUser(req, res) {
+    User.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $set: req.body },
+      { runValidators: true, new: true }
+    )
+      .then((user) =>
+        !user
+          ? res.status(404).json({ message: 'No user with this id!' })
+          : res.json(course)
+      )
+      .catch((err) => res.status(500).json(err));
+  },
+
   deleteUser(req, res) {
     User.findOneAndRemove({ _id: req.params.userId })
       .then((user) =>
@@ -83,12 +78,10 @@ module.exports = {
       });
   },
 
-   addReaction(req, res) {
-    console.log('You are adding a reaction');
-    console.log(req.body);
+  removeThought(req, res) {
     User.findOneAndUpdate(
       { _id: req.params.userId },
-      { $addToSet: { reactions: req.body } },
+      { $pull: { thought: { thoughtId: req.params.thoughtId } } },
       { runValidators: true, new: true }
     )
       .then((user) =>
@@ -101,10 +94,27 @@ module.exports = {
       .catch((err) => res.status(500).json(err));
   },
 
-  removeReaction(req, res) {
+  addFriend(req, res) {
     User.findOneAndUpdate(
       { _id: req.params.userId },
-      { $pull: { reaction: { reactionId: req.params.reactionId } } },
+      //check if format has to be different than $pull
+      { $push: { friend: { friendId: req.params.friendId } } },
+      { runValidators: true, new: true }
+    )
+      .then((user) =>
+        !user
+          ? res
+              .status(404)
+              .json({ message: 'No user found with that ID :(' })
+          : res.json(user)
+      )
+      .catch((err) => res.status(500).json(err));
+  },
+
+  removeFriend(req, res) {
+    User.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $pull: { friend: { friendId: req.params.friendId } } },
       { runValidators: true, new: true }
     )
       .then((user) =>
@@ -117,3 +127,5 @@ module.exports = {
       .catch((err) => res.status(500).json(err));
   },
 };
+
+
