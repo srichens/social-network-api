@@ -19,16 +19,6 @@ module.exports = {
       .catch((err) => res.status(500).json(err));
   },
 
-  // createThought(req, res) {
-  //   //add push thought ID to related user array
-  //   Thought.create(req.body)
-  //     .then((thought) => res.json(thought))
-  //     .catch((err) => {
-  //       console.log(err);
-  //       return res.status(500).json(err);
-  //     });
-  // },
-
   createThought(req, res) {
     Thought.create(req.body)
       .then((thought) => {
@@ -60,21 +50,13 @@ module.exports = {
       .then((thought) =>
         !thought
           ? res.status(404).json({ message: 'No thought with this id!' })
-          : res.json(course)
+          : res.json(thought)
       )
-      .catch((err) => res.status(500).json(err));
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+      });
   },
-
-  // deleteThought(req, res) {
-  //   Thought.findOneAndDelete({ _id: req.params.thoughtId })
-  //     .then((thought) =>
-  //       !thought
-  //         ? res.status(404).json({ message: 'No thought with that ID' })
-  //         : User.deleteMany({ _id: { $in: thought.username } })
-  //     )
-  //     .then(() => res.json({ message: 'Thought and username deleted!' }))
-  //     .catch((err) => res.status(500).json(err));
-  // },
 
   deleteThought(req, res) {
     Thought.findOneAndRemove({ _id: req.params.thoughtId })
