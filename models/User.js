@@ -1,7 +1,6 @@
 const { Schema, model } = require('mongoose');
-const thoughtSchema = require('./Reaction');
+//const thoughtSchema = require('./Thought');
 
-// Schema to create Student model
 const userSchema = new Schema(
   {
     username: {
@@ -16,16 +15,34 @@ const userSchema = new Schema(
       unique: true,
       match: /.+\@.+\..+/,
     },
-    thoughts: [thoughtSchema],
+    thoughts: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Thought',
+      },
+    ],
 
-    friends: [userSchema],
+    friends: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
   },
   {
     toJSON: {
-      getters: true,
+      virtuals: true,
     },
+    id: false,
   }
 );
+
+userSchema
+  .virtual('friendCount')
+  .get(function () {
+    //do something with populate?
+    return `${this.populate('friends')}`;
+  })
 
 const User = model('user', userSchema);
 
