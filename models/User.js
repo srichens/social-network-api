@@ -37,12 +37,12 @@ const userSchema = new Schema(
   }
 );
 
-userSchema
-  .virtual('friendCount')
-  .get(function () {
-    //do something with populate?
-    return `${this.populate('friends')}`;
-  })
+// userSchema
+//   .virtual('friendCount')
+//   .get(function () {
+//     do something with populate?
+//     return `${this.populate('friends')}`;
+//   });
 
 const User = model('user', userSchema);
 
