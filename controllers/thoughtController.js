@@ -33,7 +33,7 @@ module.exports = {
     Thought.create(req.body)
       .then((thought) => {
         return User.findOneAndUpdate(
-          { username: req.body.username },
+          { _id: req.body.userId },
           { $addToSet: { thoughts: thought._id } },
           { new: true }
         );
@@ -65,14 +65,35 @@ module.exports = {
       .catch((err) => res.status(500).json(err));
   },
 
+  // deleteThought(req, res) {
+  //   Thought.findOneAndDelete({ _id: req.params.thoughtId })
+  //     .then((thought) =>
+  //       !thought
+  //         ? res.status(404).json({ message: 'No thought with that ID' })
+  //         : User.deleteMany({ _id: { $in: thought.username } })
+  //     )
+  //     .then(() => res.json({ message: 'Thought and username deleted!' }))
+  //     .catch((err) => res.status(500).json(err));
+  // },
+
   deleteThought(req, res) {
-    Thought.findOneAndDelete({ _id: req.params.thoughtId })
+    Thought.findOneAndRemove({ _id: req.params.thoughtId })
       .then((thought) =>
         !thought
-          ? res.status(404).json({ message: 'No thought with that ID' })
-          : User.deleteMany({ _id: { $in: thought.username } })
+          ? res.status(404).json({ message: 'No thought with this id!' })
+          : User.findOneAndUpdate(
+              { thoughts: req.params.thoughtId },
+              { $pull: { thoughts: req.params.thoughtId } },
+              { new: true }
+            )
       )
-      .then(() => res.json({ message: 'Thought and username deleted!' }))
+      .then((user) =>
+        !user
+          ? res
+              .status(404)
+              .json({ message: 'Thought deleted but no user with this id!' })
+          : res.json({ message: 'Thought successfully deleted!' })
+      )
       .catch((err) => res.status(500).json(err));
   },
 

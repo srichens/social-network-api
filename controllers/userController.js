@@ -22,7 +22,7 @@ module.exports = {
         !user
           ? res.status(404).json({ message: 'No user with that ID' })
           : res.json({
-              user,
+              user
               //thought?
               //populate friends
              
