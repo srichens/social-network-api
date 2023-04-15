@@ -33,6 +33,7 @@ router
 
 //router.route('/:userId/thoughts/:thoughtId').delete(removeThought);
 
+
 router.route('/:userId/friends/:friendId').post(addFriend).delete(removeFriend);
 
 module.exports = router;
