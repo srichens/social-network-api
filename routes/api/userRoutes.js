@@ -9,7 +9,7 @@ const {
   //addReaction,
   //removeReaction,
   //addThought,
-  removeThought,
+  //removeThought,
   addFriend,
   removeFriend,
 } = require('../../controllers/userController');
@@ -31,7 +31,7 @@ router
 // router.route('/:userId/thoughts').post(addThought);
 
 
-router.route('/:userId/thoughts/:thoughtId').delete(removeThought);
+//router.route('/:userId/thoughts/:thoughtId').delete(removeThought);
 
 router.route('/:userId/friends/:friendId').post(addFriend).delete(removeFriend);
 

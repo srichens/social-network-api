@@ -36,7 +36,7 @@ module.exports = {
       .then((user) =>
         !user
           ? res.status(404).json({ message: 'No user with that ID' })
-          : Thought.updateMany({thoughtId: req.params.thoughtId}, { $set: {username: req.body.username } })
+          : Thought.updateMany({ _id: { $in: user.thoughts } }, { $set: {username: req.body.username } })
       )
       .then(() => res.json({ message: 'User and associated thoughts updated!' }))
       .catch((err) => res.status(500).json(err));
@@ -54,21 +54,21 @@ module.exports = {
           .catch((err) => res.status(500).json(err));
       },
 
-  removeThought(req, res) {
-    User.findOneAndUpdate(
-      { _id: req.params.userId },
-      { $pull: { thought: { thoughtId: req.params.thoughtId } } },
-      { runValidators: true, new: true }
-    )
-      .then((user) =>
-        !user
-          ? res
-              .status(404)
-              .json({ message: 'No user found with that ID :(' })
-          : res.json(user)
-      )
-      .catch((err) => res.status(500).json(err));
-  },
+  // removeThought(req, res) {
+  //   User.findOneAndUpdate(
+  //     { _id: req.params.userId },
+  //     { $pull: { thought: { thoughtId: req.params.thoughtId } } },
+  //     { runValidators: true, new: true }
+  //   )
+  //     .then((user) =>
+  //       !user
+  //         ? res
+  //             .status(404)
+  //             .json({ message: 'No user found with that ID :(' })
+  //         : res.json(user)
+  //     )
+  //     .catch((err) => res.status(500).json(err));
+  // },
 
   addFriend(req, res) {
     User.findOneAndUpdate(
