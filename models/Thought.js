@@ -1,10 +1,6 @@
 const { Schema, model } = require('mongoose');
 const Reaction = require('./Reaction');
-//const formatDate = require('../utils/formatDate');
 const dayjs = require('dayjs');
-//function formatDate(createdAt)  {
-  // dayjs(createdAt).format('MMM DD, YYYY [at] HH:MM')
-  // };
 
 const thoughtSchema = new Schema(
   {
