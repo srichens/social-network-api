@@ -21,7 +21,7 @@ This week's challenge was to to build an API for a social network web applicatio
 6. [Questions](#questions)
 
 ## Installation
-This app requires Node.js, npm, Express.js, Mongoose, and Dayjs.
+This app requires Node.js, npm, Express.js, Mongoose, and Day.js.
 
 ## Usage
 1. Run npm i to install dependencies.
@@ -38,7 +38,7 @@ Please click on the link below to see the demo video:
 2. I was nervous about getting the thoughts and friends to populate with the single user query, but was pleasantly surprised that I could simply do .populate twice, one after the other.
 3. On the controllers, I had a little trial and error getting the friends and reactions to add and delete, because of the nesting within the $pull and $addToSet operators. 
 4. I was initially (maybe still) confused by the need to create a specially name reactionId. At first I thought it meant that somehow the automatically created ID would not work with the routes that were specified, but that wasn't the case. And I at first had some of the code mixed up for creating the reactions (mentioned above), so it took a little while to reason through it. In the end, either ID works exactly the same, so I'm assuming the specially created one is simply to more easily identify which ID belongs to the reaction, rather than the thought.
-5. I was puzzled by how to format the createdAt and did a lot of research with not much luck. But in office hours one day, I noticed a classmate had used Dayjs, so that gave me a good hint. I feel like my code for the time formatting is nice and concise, so that was a success.
+5. I was puzzled by how to format the createdAt and did a lot of research with not much luck. But in office hours one day, I noticed a classmate had used Day.js, so that gave me a good hint. I feel like my code for the time formatting is nice and concise, so that was a success.
 
 ## License
 This product is licensed under MIT.
